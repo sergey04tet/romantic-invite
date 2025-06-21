@@ -1,0 +1,154 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Твои пожелания 💬</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to bottom, #0e0d1e, #1a183a);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      min-height: 100vh;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2.2em;
+      margin-bottom: 20px;
+      color: #ffe9ec;
+      text-shadow: 0 0 10px #000;
+    }
+
+    p {
+      max-width: 640px;
+      font-size: 1.1em;
+      color: #ddd;
+      line-height: 1.6;
+      text-shadow: 0 0 4px #000;
+      margin-bottom: 30px;
+    }
+
+    form {
+      width: 100%;
+      max-width: 600px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    textarea {
+      padding: 14px;
+      border-radius: 10px;
+      border: none;
+      resize: vertical;
+      font-size: 1em;
+      font-family: inherit;
+      height: 150px;
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      backdrop-filter: blur(4px);
+      outline: none;
+    }
+
+    button {
+      padding: 12px 24px;
+      border-radius: 8px;
+      background: #ffe9ec;
+      color: #222;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background: #ffc9db;
+    }
+
+    .heart {
+      margin-top: 40px;
+      font-size: 36px;
+      animation: pulse 1.4s infinite;
+    }
+
+    #confirmation {
+      display: none;
+      font-size: 1.5em;
+      color: #ffe9ec;
+      text-align: center;
+      margin-top: 40px;
+      opacity: 0;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.15); }
+      100% { transform: scale(1); }
+    }
+  </style>
+</head>
+<body>
+ <h1>💌 Напиши, чего хочешь ты</h1>
+<p>
+Каждый мужчина движется быстрее, когда рядом с ним — его вдохновение.  
+И я в своём выборе двигателя абсолютно уверен. Это ты.  
+Что бы ты ни написала — это уже прекрасно.  
+Потому что твоё присутствие — самое главное.  
+Остальное я просто подстрою под тебя с радостью.
+</p>
+
+
+  <form id="wish-form">
+    <input type="hidden" name="access_key" value="6e5b4626-0d9b-4b46-9164-8550841e1f41">
+    <textarea
+      name="message"
+      required
+      placeholder="Что бы тебе хотелось в этот вечер..."></textarea>
+    <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
+    <button type="submit">Отправить 💌</button>
+  </form>
+
+  <div id="confirmation">💌 Желание услышано. Остальное — на мне.</div>
+
+  <div class="heart">💖</div>
+
+  <script>
+    const form = document.getElementById("wish-form");
+    const confirmation = document.getElementById("confirmation");
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const data = new FormData(form);
+      data.append("access_key", "6e5b4626-0d9b-4b46-9164-8550841e1f41");
+
+      fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: data,
+      })
+      .then(() => {
+        form.reset();
+        confirmation.style.display = "block";
+        confirmation.animate([
+          { opacity: 0, transform: "translateY(30px)" },
+          { opacity: 1, transform: "translateY(0)" }
+        ], {
+          duration: 800,
+          fill: "forwards",
+          easing: "ease-out"
+        });
+      })
+      .catch(() => {
+        confirmation.textContent = "Упс, что-то пошло не так. Попробуй ещё раз ✨";
+        confirmation.style.display = "block";
+      });
+    });
+  </script>
+</body>
+</html>
